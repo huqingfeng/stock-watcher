@@ -33,9 +33,11 @@ class DemoController extends Controller
     public function helloAction($name)
     {
     	
-		$stockWatcher = new StockWatcher();
-		$stockRecords = $stockWatcher->getFinalizedRecords();
-		$timeInterval = array_keys($stockWatcher->getTimeInterval());
+        $stockWatcher = new StockWatcher();
+        $stockRecords = $stockWatcher->getFinalizedRecords();
+        $timeInterval = array_keys($stockWatcher->getTimeInterval());
+        
+        echo 'wori';
 
         return array('stockRecords' => $stockRecords, 'timeInterval' => $timeInterval);
 		
