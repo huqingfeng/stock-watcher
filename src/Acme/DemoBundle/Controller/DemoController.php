@@ -37,7 +37,6 @@ class DemoController extends Controller
         $stockRecords = $stockWatcher->getFinalizedRecords();
         $timeInterval = array_keys($stockWatcher->getTimeInterval());
         
-        print_r($stockRecords);
         return array('stockRecords' => $stockRecords, 'timeInterval' => $timeInterval);
 		
 	    // return $this->render(
