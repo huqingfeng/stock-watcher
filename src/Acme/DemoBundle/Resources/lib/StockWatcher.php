@@ -69,12 +69,12 @@ class StockWatcher
     public function getTimeInterval()
     {
         return array(
-            'day' => Date('Y-m-d', strtotime('- 1 days')),
-            'week' => Date('Y-m-d', strtotime('- 7 days')),
-            'month' => Date('Y-m-d', strtotime('- 30 Days')),
-            'threeMonth' => Date('Y-m-d', strtotime('- 90 Days')),
-            'sixMonth' => Date('Y-m-d', strtotime('- 180 Days')),
-            'year' => Date('Y-m-d', strtotime('- 360 Days')),
+            'day' => date('N', strtotime('- 1 days')) == 7 ? date('Y-m-d', strtotime('- 3 days')) : (date('N', strtotime('- 1 days')) == 6 ? date('Y-m-d', strtotime('- 2 days')) : date('Y-m-d', strtotime('- 1 days'))),
+            'week' => date('N', strtotime('- 7 days')) == 7 ? date('Y-m-d', strtotime('- 9 days')) : (date('N', strtotime('- 7 days')) == 6 ? date('Y-m-d', strtotime('- 8 days')) : date('Y-m-d', strtotime('- 7 days'))),
+            'month' => date('N', strtotime('- 30 days')) == 7 ? date('Y-m-d', strtotime('- 32 days')) : (date('N', strtotime('- 30 days')) == 6 ? date('Y-m-d', strtotime('- 31 days')) : date('Y-m-d', strtotime('- 30 days'))),
+            'threeMonth' => date('N', strtotime('- 90 days')) == 7 ? date('Y-m-d', strtotime('- 92 days')) : (date('N', strtotime('- 90 days')) == 6 ? date('Y-m-d', strtotime('- 91 days')) : date('Y-m-d', strtotime('- 90 days'))),
+            'sixMonth' => date('N', strtotime('- 180 days')) == 7 ? date('Y-m-d', strtotime('- 182 days')) : (date('N', strtotime('- 180 days')) == 6 ? date('Y-m-d', strtotime('- 181 days')) : date('Y-m-d', strtotime('- 180 days'))),
+            'year' => date('N', strtotime('- 360 days')) == 7 ? date('Y-m-d', strtotime('- 362 days')) : (date('N', strtotime('- 360 days')) == 6 ? date('Y-m-d', strtotime('- 361 days')) : date('Y-m-d', strtotime('- 360 days'))),
         );
     }
 
