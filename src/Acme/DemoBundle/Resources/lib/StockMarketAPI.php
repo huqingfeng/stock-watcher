@@ -126,7 +126,7 @@ class StockMarketAPI
 		  $row = 0;  
 		  while (($data = fgetcsv($handle, false, ',')) !== FALSE) {
 			  $num = count($data);
-			  $return[$this->symbol][$row] = array();
+			  $return[$this->symbol][$data[0]] = array();
 			  for ($c=0; $c < $num; $c++) {
 				  switch($c) {
 					case 0:
@@ -151,7 +151,7 @@ class StockMarketAPI
 						$key = 'adj_close';
 						break;
 				  }
-				  $return[$this->symbol][$row][$key] = $data[$c];
+				  $return[$this->symbol][$data[0]][$key] = $data[$c];
 			  }
 			  $row++;
 		  } //end while
@@ -183,7 +183,7 @@ class StockMarketAPI
 		if($stat) $this->_setParam('stat', $stat);
 	  
 		$data = $this->_request();
-	  
+                
 		if(!$this->history) {
 			if ($this->stat === 'all') { 
 				foreach ($data as $item) {

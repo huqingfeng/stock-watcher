@@ -92,7 +92,7 @@ class StockWatcher
             $riskShed = $this->getRiskshed();
             $currentPrice = $stockCurrentRecord['price'];
 
-
+            
             $stockHistoricalRecords = $this->getYahooFinanceData($stockSymbol, $startDate, $endDate);
 
             $finalizedRecords[$stockSymbol] = array();
@@ -100,27 +100,46 @@ class StockWatcher
             $finalizedRecords[$stockSymbol]['symbol'] = $stockSymbol;
             $finalizedRecords[$stockSymbol]['current_price'] = $currentPrice;
 
-
-            foreach($stockHistoricalRecords as $stockHistoricalRecord) {
-                foreach($stockHistoricalRecord as $stockHistoricalRecordPerDay) {
-
-                    foreach($this->getTimeInterval() as $timeInterval => $date) {
-
-                        if(isset($stockHistoricalRecordPerDay['date']) && $stockHistoricalRecordPerDay['date'] == $date) {
-                            $lastPrice = $stockHistoricalRecordPerDay['close'];
-
-                            $decreaseRatio = $this->getDecreaseRatio($currentPrice, $lastPrice);
-
-                            $finalizedRecords[$stockSymbol][$timeInterval] = array(
-                                'last_price'        => round($lastPrice, 2),
-                                'decrease_ratio'    => $decreaseRatio,
-                                'risk'              => isset($riskShed[$timeInterval]) && $decreaseRatio <= $riskShed[$timeInterval] ? true : false
-                            );
+            foreach ($this->getTimeInterval() as $timeInterval => $date) {
+                
+                if(isset($stockHistoricalRecords[$stockSymbol])) {
+                    $lastPrice = 0;
+                    
+                    if(isset($stockHistoricalRecords[$stockSymbol][$date])) {
+                        $lastPrice = $stockHistoricalRecords[$stockSymbol][$date]['close'];
+                    } else {
+                        $dateBeforeOneDay = date('Y-m-d', strtotime('- 1 days', strtotime($date)));
+                        $dateBeforeTwoDay = date('Y-m-d', strtotime('- 2 days', strtotime($date)));
+                        $dateBeforeThreeDay = date('Y-m-d', strtotime('- 3 days', strtotime($date)));
+                        $dateBeforeFourDay = date('Y-m-d', strtotime('- 4 days', strtotime($date)));
+                        $dateBeforeFiveDay = date('Y-m-d', strtotime('- 5 days', strtotime($date)));
+                        
+                        if(isset($stockHistoricalRecords[$stockSymbol][$dateBeforeOneDay])) {
+                            $lastPrice = $stockHistoricalRecords[$stockSymbol][$dateBeforeOneDay]['close'];
+                        } elseif (isset($stockHistoricalRecords[$stockSymbol][$dateBeforeTwoDay])) {
+                            $lastPrice = $stockHistoricalRecords[$stockSymbol][$dateBeforeTwoDay]['close'];
+                        } elseif (isset($stockHistoricalRecords[$stockSymbol][$dateBeforeThreeDay])) {
+                            $lastPrice = $stockHistoricalRecords[$stockSymbol][$dateBeforeThreeDay]['close'];
+                        } elseif (isset($stockHistoricalRecords[$stockSymbol][$dateBeforeFourDay])) {
+                            $lastPrice = $stockHistoricalRecords[$stockSymbol][$dateBeforeFourDay]['close'];
+                        } elseif (isset($stockHistoricalRecords[$stockSymbol][$dateBeforeFiveDay])) {
+                            $lastPrice = $stockHistoricalRecords[$stockSymbol][$dateBeforeFiveDay]['close'];
                         }
                     }
+                    
+                    if(!empty($lastPrice)) {
+                        $decreaseRatio = $this->getDecreaseRatio($currentPrice, $lastPrice);
 
+                        $finalizedRecords[$stockSymbol][$timeInterval] = array(
+                            'last_price' => round($lastPrice, 2),
+                            'decrease_ratio' => $decreaseRatio,
+                            'risk' => isset($riskShed[$timeInterval]) && $decreaseRatio <= $riskShed[$timeInterval] ? true : false
+                        );
+                    }
                 }
             }
+            
+            
         }
 
         return $finalizedRecords;
