@@ -19,6 +19,9 @@ class StockWatcher
     public function getStockSymbols()
     {
         return array(
+                'SPY',
+                'QQQ',
+                'USO',
                 'AAPL',
                 'WUBA',
                 'QIHU',
@@ -33,7 +36,9 @@ class StockWatcher
                 'BABA',
                 'SPY',
                 'QQQ',
-                'MOMO'
+                'MOMO',
+                'YOKU',
+                'TSLA',
             );
     }
 
